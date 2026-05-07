@@ -3,14 +3,15 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../context/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const items = [
-  { src: "/gia-ivry-gitlis.jpg",       label: "With Ivry Gitlis",      sub: "St. Petersburg, 2023",  caption: "Gia Jashvili & Ivry Gitlis",    align: "left" as const,         aspect: "16/10", width: 680 },
-  { src: "/gia-joshua-bell-concert.jpg", label: "With Joshua Bell",    sub: "2023",                  caption: "Gia Jashvili",                  align: "center-left" as const,  aspect: "16/10", width: 640 },
-  { src: "/gia-perform-japan.JPG",     label: "Concert in Japan",      sub: "Tokyo, 2023",           caption: "Gia Jashvili",                  align: "center-right" as const, aspect: "16/10", width: 660 },
-  { src: "/gia-solo-perform.JPG",      label: "Solo Performance",      sub: "Tbilisi, Georgia",      caption: "Gia Jashvili",                  align: "left" as const,         aspect: "3/4",   width: 480 },
+const itemsMeta = [
+  { src: "/gia-ivry-gitlis.jpg",        caption: "Gia Jashvili & Ivry Gitlis", align: "left" as const,         aspect: "16/10", width: 680 },
+  { src: "/gia-joshua-bell-concert.jpg", caption: "Gia Jashvili",              align: "center-left" as const,  aspect: "16/10", width: 640 },
+  { src: "/gia-perform-japan.JPG",       caption: "Gia Jashvili",              align: "center-right" as const, aspect: "16/10", width: 660 },
+  { src: "/gia-solo-perform.JPG",        caption: "Gia Jashvili",              align: "left" as const,         aspect: "3/4",   width: 480 },
 ];
 
 type Align = "left" | "right" | "center-left" | "center-right";
@@ -26,7 +27,7 @@ function getMargin(align: Align) {
 
 const PARALLAX_AMOUNTS = [20, -25, 18, -20, 22];
 
-function GalleryItem({ item, index }: { item: typeof items[0]; index: number }) {
+function GalleryItem({ item, index }: { item: typeof itemsMeta[0] & { label: string; sub: string }; index: number }) {
   const wrapRef    = useRef<HTMLDivElement>(null);
   const imgRef     = useRef<HTMLDivElement>(null);
   const imgInnerRef = useRef<HTMLDivElement>(null);
@@ -146,6 +147,9 @@ function GalleryItem({ item, index }: { item: typeof items[0]; index: number }) 
 }
 
 export default function Gallery() {
+  const { t } = useLanguage();
+  const items = itemsMeta.map((m, i) => ({ ...m, label: t.gallery.items[i].label, sub: t.gallery.items[i].sub }));
+
   return (
     <section id="gallery" style={{ background: "#000000", paddingBottom: "14vw", overflow: "hidden" }}>
       <div style={{ position: "relative" }}>

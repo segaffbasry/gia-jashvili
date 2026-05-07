@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../context/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,6 +55,7 @@ function maskLines(el: HTMLElement, trigger: Element, delay = 0) {
 }
 
 export default function Contact() {
+  const { t } = useLanguage();
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -144,14 +146,14 @@ export default function Contact() {
                 lineHeight: 1,
               }}
             >
-              Contact
+              {t.contact.heading}
             </h2>
 
             <div
               ref={labelRef}
               style={{
                 fontFamily: "var(--font-hedvig)",
-                color: "rgba(255,255,255,0.5)",
+                color: "var(--color-accent)",
                 fontSize: "20px",
                 fontWeight: 300,
                 lineHeight: "26px",
@@ -160,7 +162,7 @@ export default function Contact() {
                 marginBottom: "0.4rem",
               }}
             >
-              Direct Inquiries
+              {t.contact.label}
             </div>
 
             <div
@@ -175,7 +177,7 @@ export default function Contact() {
                 marginBottom: "1rem",
               }}
             >
-              General &amp; concert enquiries
+              {t.contact.description}
             </div>
 
             <a

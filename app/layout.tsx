@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans, Hedvig_Letters_Serif, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "./components/SmoothScroll";
+import { LanguageProvider } from "./context/LanguageContext";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -47,8 +48,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${playfair.variable} ${dmSans.variable} ${hedvig.variable} ${cormorant.variable}`}>
       <body className="antialiased">
-        <SmoothScroll />
-        {children}
+        <LanguageProvider>
+          <SmoothScroll />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   );

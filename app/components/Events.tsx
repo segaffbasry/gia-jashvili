@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../context/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -10,7 +11,6 @@ const event = {
   day: "FRI",
   date: "May 23",
   year: "2026",
-  country: "INDONESIA",
   title: "Bruch Violin Concerto",
   program: "Max Bruch, Violin Concerto No. 1 in G minor, Op. 26",
   ensemble: "Jakarta Concert Orchestra",
@@ -65,6 +65,7 @@ function maskLines(el: HTMLElement, trigger: Element, delay = 0) {
 }
 
 export default function Events() {
+  const { t } = useLanguage();
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -147,7 +148,7 @@ export default function Events() {
                   display: "block",
                 }}
               >
-                CALENDAR
+                {t.events.calendar.toUpperCase()}
               </span>
             </div>
           </div>
@@ -167,7 +168,7 @@ export default function Events() {
                 textTransform: "uppercase",
               }}
             >
-              CALENDAR
+              {t.events.calendar.toUpperCase()}
             </span>
           </div>
         )}
@@ -233,18 +234,18 @@ export default function Events() {
               <div
                 style={{
                   fontFamily: "var(--font-hedvig)",
-                  color: "rgba(255,255,255,0.45)",
+                  color: "var(--color-accent)",
                   fontSize: "14px",
                   fontWeight: 300,
                   letterSpacing: "0.08em",
                   textTransform: "uppercase",
-                  borderBottom: "1px solid rgba(255,255,255,0.2)",
+                  borderBottom: "1px solid var(--color-accent)",
                   display: "inline-block",
                   paddingBottom: "2px",
                   marginBottom: "14px",
                 }}
               >
-                {event.country}
+                {t.events.country.toUpperCase()}
               </div>
 
               <div
@@ -329,10 +330,10 @@ export default function Events() {
                   textUnderlineOffset: "4px",
                   transition: "color 0.2s",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
                 onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.45)")}
               >
-                tickets
+                {t.events.tickets}
               </a>
             </div>
           </div>

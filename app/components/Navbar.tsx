@@ -1,18 +1,33 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { Languages } from "lucide-react";
 import gsap from "gsap";
+import { useLanguage } from "../context/LanguageContext";
+import { Locale } from "../translations";
 
-const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Biography", href: "#about" },
-  { label: "Concerts", href: "#events" },
-  { label: "Gallery", href: "#gallery" },
-  { label: "Teaching", href: "#teaching" },
-  { label: "Contact", href: "#contact" },
+const navHrefs = ["#home", "#about", "#events", "#gallery", "#teaching", "#contact"];
+
+const LOCALES: { code: Locale; label: string }[] = [
+  { code: "en", label: "English" },
+  { code: "id", label: "Indonesia" },
+  { code: "zh", label: "中文" },
+  { code: "ja", label: "日本語" },
 ];
 
 export default function Navbar() {
+  const { t, locale, setLocale } = useLanguage();
+  const [langOpen, setLangOpen] = useState(false);
+
+  const navLinks = [
+    { label: t.nav.home,      href: "#home" },
+    { label: t.nav.biography, href: "#about" },
+    { label: t.nav.concerts,  href: "#events" },
+    { label: t.nav.gallery,   href: "#gallery" },
+    { label: t.nav.teaching,  href: "#teaching" },
+    { label: t.nav.contact,   href: "#contact" },
+  ];
+
   const navRef = useRef<HTMLElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
   const blurRef = useRef(0);
@@ -226,12 +241,81 @@ export default function Navbar() {
                   transition: "opacity 0.3s ease",
                   cursor: "pointer",
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.5")}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.9")}
+                onMouseEnter={(e) => { e.currentTarget.style.color = "var(--color-accent)"; e.currentTarget.style.opacity = "1"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = "#ffffff"; e.currentTarget.style.opacity = "0.9"; }}
               >
                 {link.label}
               </a>
             ))}
+
+          {/* Language switcher */}
+          <div style={{ position: "relative" }}>
+            <button
+              onClick={() => setLangOpen((v) => !v)}
+              aria-label="Select language"
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.35rem",
+                color: langOpen ? "var(--color-accent)" : "rgba(255,255,255,0.75)",
+                padding: "4px 6px",
+                transition: "color 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+              onMouseLeave={(e) => { if (!langOpen) e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
+            >
+              <Languages size={16} strokeWidth={1.5} />
+              <span style={{ fontFamily: "var(--font-hedvig)", fontSize: "0.75rem", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                {locale.toUpperCase()}
+              </span>
+            </button>
+
+            {langOpen && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "calc(100% + 8px)",
+                  right: 0,
+                  background: "rgba(10,10,10,0.96)",
+                  backdropFilter: "blur(16px)",
+                  WebkitBackdropFilter: "blur(16px)",
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  minWidth: "130px",
+                  zIndex: 300,
+                }}
+                onMouseLeave={() => setLangOpen(false)}
+              >
+                {LOCALES.map(({ code, label }) => (
+                  <button
+                    key={code}
+                    onClick={() => { setLocale(code); setLangOpen(false); }}
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      padding: "0.65rem 1rem",
+                      fontFamily: "var(--font-hedvig)",
+                      fontSize: "0.8rem",
+                      letterSpacing: "0.05em",
+                      color: code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.7)",
+                      borderBottom: "1px solid rgba(255,255,255,0.05)",
+                      transition: "color 0.15s",
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.7)")}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Hamburger */}
           {isMobile && (

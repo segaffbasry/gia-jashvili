@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../context/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -46,6 +47,7 @@ function maskLines(el: HTMLElement, trigger: Element, delay = 0) {
 }
 
 export default function Teaching() {
+  const { t } = useLanguage();
   const sectionRef  = useRef<HTMLElement>(null);
   const headingRef  = useRef<HTMLHeadingElement>(null);
   const bodyRef     = useRef<HTMLParagraphElement>(null);
@@ -96,7 +98,7 @@ export default function Teaching() {
               marginBottom: "1.5rem",
             }}
           >
-            Teaching &amp; Masterclasses
+            {t.teaching.heading}
           </h2>
 
           <div style={{ overflow: "hidden", marginBottom: "1.5rem" }}>
@@ -115,7 +117,7 @@ export default function Teaching() {
               marginBottom: "2rem",
             }}
           >
-            Gia is an inspiring teacher and mentor, guiding students at conservatories across Europe and Asia. He believes that teaching and performing share the same root: to show what beauty music can bring; to be generous, genuine, and patient; to open doors for others and allow them, by their own will, to walk through.
+            {t.teaching.body}
           </p>
 
           <div style={{ overflow: "hidden", marginBottom: "1.5rem" }}>
@@ -130,7 +132,7 @@ export default function Teaching() {
               top: "-2rem",
               left: "-1rem",
               fontFamily: "var(--font-hedvig)",
-              color: "rgba(255,255,255,0.08)",
+              color: "rgba(155,96,87,0.25)",
               fontSize: "120px",
               lineHeight: 1,
               userSelect: "none",
@@ -149,7 +151,7 @@ export default function Teaching() {
                 margin: 0,
               }}
             >
-              Why do music? Because it demands you to observe, to understand, to empathize and to take action. It makes you a better person.
+              {t.teaching.quote}
             </p>
           </div>
 

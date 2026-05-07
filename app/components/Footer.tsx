@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLanguage();
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
   const [isMobile, setIsMobile] = useState(false);
 
@@ -40,7 +42,7 @@ export default function Footer() {
           }}
         >
           <div>
-            <div style={{ ...labelStyle, marginBottom: "0.3rem" }}>Contact</div>
+            <div style={{ ...labelStyle, marginBottom: "0.3rem" }}>{t.footer.contact}</div>
             <a
               href="mailto:giajashvili@gmail.com"
               style={linkStyle}
@@ -52,7 +54,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <div style={{ ...labelStyle, marginBottom: "0.5rem" }}>Socials</div>
+            <div style={{ ...labelStyle, marginBottom: "0.5rem" }}>{t.footer.socials}</div>
             {["YOUTUBE", "INSTAGRAM"].map((s) => (
               <a
                 key={s}
@@ -78,7 +80,7 @@ export default function Footer() {
             onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}
           >
-            To top ↑
+            {t.footer.toTop} ↑
           </button>
         </div>
 
@@ -123,13 +125,13 @@ export default function Footer() {
             onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
             onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(255,255,255,0.6)")}
           >
-            To top
+            {t.footer.toTop}
           </button>
         </div>
 
         {/* Center — Contact */}
         <div>
-          <div style={{ ...labelStyle, marginBottom: "0.3rem" }}>Contact</div>
+          <div style={{ ...labelStyle, marginBottom: "0.3rem" }}>{t.footer.contact}</div>
           <a
             href="mailto:giajashvili@gmail.com"
             style={linkStyle}
@@ -142,7 +144,7 @@ export default function Footer() {
 
         {/* Right — Socials */}
         <div>
-          <div style={{ ...labelStyle, marginBottom: "0.5rem" }}>Socials</div>
+          <div style={{ ...labelStyle, marginBottom: "0.5rem" }}>{t.footer.socials}</div>
           {["YOUTUBE", "INSTAGRAM"].map((s) => (
             <a
               key={s}

@@ -3,17 +3,12 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../context/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PARAGRAPHS = [
-  "Gia Jashvili is an Austrian violinist with Georgian roots, bridging the Eastern and Western European musical traditions. Renowned for his ability to seamlessly blend the bold, expressive intensity of the Russian violin school with the refined clarity and elegance of the Viennese sound, Gia\u2019s musical journey reflects the profound impact of these traditions, blending technical brilliance with nuanced artistry.",
-  "Born into a family of renowned musicians, Gia inherited the tradition of the Russian violin school. He studied with Zakhar Bron in Cologne, refined his Viennese style with Gerhard Schulz in Vienna, and was mentored for over a decade by the legendary Ivry Gitlis, who shaped his artistic voice with a balance of freedom, authenticity, and individuality.",
-];
-
 function animatePara(para: HTMLParagraphElement, text: string) {
   const containerWidth = para.getBoundingClientRect().width;
-
   const computedFontSize = getComputedStyle(para).fontSize;
   const tempSpan = document.createElement("span");
   tempSpan.style.cssText = `
@@ -63,17 +58,18 @@ function animatePara(para: HTMLParagraphElement, text: string) {
 }
 
 export default function Biography() {
+  const { t, locale } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const para1Ref   = useRef<HTMLParagraphElement>(null);
   const para2Ref   = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      if (para1Ref.current) animatePara(para1Ref.current, PARAGRAPHS[0]);
-      if (para2Ref.current) animatePara(para2Ref.current, PARAGRAPHS[1]);
+      if (para1Ref.current) animatePara(para1Ref.current, t.biography.p1);
+      if (para2Ref.current) animatePara(para2Ref.current, t.biography.p2);
     });
     return () => ctx.revert();
-  }, []);
+  }, [locale, t]);
 
   const paraStyle: React.CSSProperties = {
     fontFamily: "var(--font-hedvig)",
@@ -87,8 +83,8 @@ export default function Biography() {
 
   return (
     <section id="about" ref={sectionRef} style={{ background: "#000000", padding: "8vw 6% 10vw" }}>
-      <p ref={para1Ref} style={paraStyle}>{PARAGRAPHS[0]}</p>
-      <p ref={para2Ref} style={{ ...paraStyle, marginTop: "2.5rem" }}>{PARAGRAPHS[1]}</p>
+      <p ref={para1Ref} style={paraStyle}>{t.biography.p1}</p>
+      <p ref={para2Ref} style={{ ...paraStyle, marginTop: "2.5rem" }}>{t.biography.p2}</p>
     </section>
   );
 }
