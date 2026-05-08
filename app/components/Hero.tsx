@@ -201,7 +201,7 @@ export default function Hero() {
           <div style={{ position: "absolute", top: "50%", left: "35%", right: "35%", height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent, rgba(185,166,153,0.9), #ffffff, rgba(185,166,153,0.9), transparent)", opacity: 0.75 }} />
         </div>
 
-          <div ref={subtitleRef} style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "2rem", alignSelf: "flex-end" }}>
+          <div ref={subtitleRef} style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "2rem", alignSelf: "flex-end", marginRight: "55px" }}>
             {titles.map((title) => (
               <span key={title} style={{
                 fontFamily: '"Hedvig Letters Serif", serif',
