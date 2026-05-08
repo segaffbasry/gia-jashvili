@@ -15,6 +15,83 @@ const LOCALES: { code: Locale; label: string }[] = [
   { code: "ja", label: "日本語" },
 ];
 
+const FONT: React.CSSProperties = {
+  fontFamily: "var(--font-hedvig)",
+  fontSize: "0.72rem",
+  letterSpacing: "0.1em",
+  textTransform: "uppercase" as const,
+  fontWeight: 400,
+  lineHeight: "1em",
+  whiteSpace: "pre" as const,
+};
+
+function NavLink({ label, href, onClick }: { label: string; href: string; onClick: () => void }) {
+  const wrapperRef = useRef<HTMLAnchorElement>(null);
+  const lineRef    = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (!wrapperRef.current) return;
+    gsap.set(wrapperRef.current.querySelectorAll<HTMLElement>(".nl-d"), { yPercent: 0 });
+    gsap.set(wrapperRef.current.querySelectorAll<HTMLElement>(".nl-h"), { yPercent: 100 });
+    gsap.set(lineRef.current, { scaleX: 0, transformOrigin: "right center" });
+  }, [label]);
+
+  const enter = () => {
+    if (!wrapperRef.current) return;
+    const d = Array.from(wrapperRef.current.querySelectorAll<HTMLElement>(".nl-d"));
+    const h = Array.from(wrapperRef.current.querySelectorAll<HTMLElement>(".nl-h"));
+    gsap.killTweensOf([...d, ...h, lineRef.current]);
+    gsap.to(d, { yPercent: -100, duration: 0.4, stagger: 0.025, ease: "power3.inOut" });
+    gsap.to(h, { yPercent: 0,    duration: 0.4, stagger: 0.025, ease: "power3.inOut" });
+    gsap.to(lineRef.current, { scaleX: 1, transformOrigin: "right center", duration: 0.45, ease: "power3.inOut" });
+  };
+
+  const leave = () => {
+    if (!wrapperRef.current) return;
+    const d = Array.from(wrapperRef.current.querySelectorAll<HTMLElement>(".nl-d"));
+    const h = Array.from(wrapperRef.current.querySelectorAll<HTMLElement>(".nl-h"));
+    gsap.killTweensOf([...d, ...h, lineRef.current]);
+    gsap.to(h, { yPercent: 100, duration: 0.35, stagger: 0.02, ease: "power3.inOut" });
+    gsap.to(d, { yPercent: 0,   duration: 0.35, stagger: 0.02, ease: "power3.inOut" });
+    gsap.to(lineRef.current, { scaleX: 0, transformOrigin: "left center", duration: 0.35, ease: "power3.inOut" });
+  };
+
+  return (
+    <a
+      ref={wrapperRef}
+      href={href}
+      onClick={(e) => { e.preventDefault(); onClick(); }}
+      onMouseEnter={enter}
+      onMouseLeave={leave}
+      style={{ display: "inline-flex", cursor: "pointer", textDecoration: "none", gap: 0, position: "relative" }}
+    >
+      {label.split("").map((ch, i) => (
+        <span key={i} style={{ display: "inline-block", overflow: "hidden", position: "relative", verticalAlign: "top", ...FONT }}>
+          {/* sizer — sets clip box dimensions, invisible */}
+          <span style={{ visibility: "hidden" }}>{ch}</span>
+          {/* default char */}
+          <span className="nl-d" style={{ position: "absolute", inset: 0, color: "rgba(255,255,255,0.88)" }}>{ch}</span>
+          {/* hover char */}
+          <span className="nl-h" style={{ position: "absolute", inset: 0, color: "var(--color-accent)", fontStyle: "italic" }}>{ch}</span>
+        </span>
+      ))}
+      <span
+        ref={lineRef}
+        style={{
+          position: "absolute",
+          bottom: "-3px",
+          left: 0,
+          width: "100%",
+          height: "1px",
+          background: "var(--color-accent)",
+          display: "block",
+          transformOrigin: "right center",
+        }}
+      />
+    </a>
+  );
+}
+
 export default function Navbar() {
   const { t, locale, setLocale } = useLanguage();
   const [langOpen, setLangOpen] = useState(false);
@@ -46,7 +123,6 @@ export default function Navbar() {
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const overlayBgRef = useRef<HTMLDivElement>(null);
 
-  // Detect breakpoint
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 1024);
     check();
@@ -54,7 +130,6 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Desktop: smooth hide/show + blur on scroll
   useEffect(() => {
     if (isMobile) {
       cancelAnimationFrame(rafRef.current);
@@ -96,7 +171,6 @@ export default function Navbar() {
     return () => cancelAnimationFrame(rafRef.current);
   }, [isMobile]);
 
-  // Build GSAP timeline for overlay open/close
   const buildTimeline = useCallback(() => {
     if (!overlayRef.current) return;
 
@@ -104,14 +178,12 @@ export default function Navbar() {
 
     const tl = gsap.timeline({ paused: true });
 
-    // Overlay background wipes down from top
     tl.fromTo(
       overlayRef.current,
       { clipPath: "inset(0 0 100% 0)", pointerEvents: "none" },
       { clipPath: "inset(0 0 0% 0)", pointerEvents: "all", duration: 0.68, ease: "expo.inOut" }
     );
 
-    // Subtle dark panel behind links
     if (overlayBgRef.current) {
       tl.fromTo(
         overlayBgRef.current,
@@ -121,12 +193,10 @@ export default function Navbar() {
       );
     }
 
-    // Hamburger lines → X
     tl.to(line1Ref.current, { y: 8, rotate: 45, duration: 0.32, ease: "power3.inOut" }, 0);
     tl.to(line2Ref.current, { scaleX: 0, opacity: 0, duration: 0.18, ease: "power2.in" }, 0);
     tl.to(line3Ref.current, { y: -8, rotate: -45, duration: 0.32, ease: "power3.inOut" }, 0);
 
-    // Nav links stagger up from below with clip reveal
     tl.fromTo(
       linkRefs.current.filter(Boolean),
       { y: 60, opacity: 0, skewY: 3 },
@@ -153,7 +223,6 @@ export default function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
-  // Auto-close on resize to desktop
   useEffect(() => {
     if (!isMobile && menuOpen) setMenuOpen(false);
   }, [isMobile, menuOpen]);
@@ -180,7 +249,6 @@ export default function Navbar() {
           willChange: "transform",
         }}
       >
-        {/* Blurred backdrop (desktop) */}
         <div
           ref={bgRef}
           style={{
@@ -204,7 +272,6 @@ export default function Navbar() {
             gap: isMobile ? 0 : "3rem",
           }}
         >
-          {/* Mobile: name left */}
           {isMobile && (
             <span
               style={{
@@ -221,156 +288,104 @@ export default function Navbar() {
           )}
 
           {/* Desktop links */}
-          {!isMobile &&
-            navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollTo(link.href);
-                }}
+          {!isMobile && navLinks.map((link) => (
+            <NavLink key={link.label} label={link.label} href={link.href} onClick={() => scrollTo(link.href)} />
+          ))}
+
+          {/* Language switcher + hamburger group */}
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginLeft: isMobile ? "auto" : 0 }}>
+            <div style={{ position: "relative" }}>
+              <button
+                onClick={() => setLangOpen((v) => !v)}
+                aria-label="Select language"
                 style={{
-                  fontFamily: "var(--font-hedvig)",
-                  color: "#ffffff",
-                  fontSize: "0.875rem",
-                  fontWeight: 400,
-                  letterSpacing: "0.01em",
-                  textDecoration: "none",
-                  opacity: 0.9,
-                  transition: "opacity 0.3s ease",
+                  background: "none",
+                  border: "none",
                   cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.35rem",
+                  color: langOpen ? "var(--color-accent)" : "rgba(255,255,255,0.75)",
+                  padding: "4px 6px",
+                  transition: "color 0.2s",
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = "var(--color-accent)"; e.currentTarget.style.opacity = "1"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = "#ffffff"; e.currentTarget.style.opacity = "0.9"; }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+                onMouseLeave={(e) => { if (!langOpen) e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
               >
-                {link.label}
-              </a>
-            ))}
+                <Languages size={16} strokeWidth={1.5} />
+                <span style={{ fontFamily: "var(--font-hedvig)", fontSize: "0.75rem", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                  {locale.toUpperCase()}
+                </span>
+              </button>
 
-          {/* Language switcher */}
-          <div style={{ position: "relative" }}>
-            <button
-              onClick={() => setLangOpen((v) => !v)}
-              aria-label="Select language"
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.35rem",
-                color: langOpen ? "var(--color-accent)" : "rgba(255,255,255,0.75)",
-                padding: "4px 6px",
-                transition: "color 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
-              onMouseLeave={(e) => { if (!langOpen) e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
-            >
-              <Languages size={16} strokeWidth={1.5} />
-              <span style={{ fontFamily: "var(--font-hedvig)", fontSize: "0.75rem", letterSpacing: "0.06em", textTransform: "uppercase" }}>
-                {locale.toUpperCase()}
-              </span>
-            </button>
+              {langOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 8px)",
+                    right: 0,
+                    background: "rgba(10,10,10,0.96)",
+                    backdropFilter: "blur(16px)",
+                    WebkitBackdropFilter: "blur(16px)",
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    minWidth: "130px",
+                    zIndex: 300,
+                  }}
+                  onMouseLeave={() => setLangOpen(false)}
+                >
+                  {LOCALES.map(({ code, label }) => (
+                    <button
+                      key={code}
+                      onClick={() => { setLocale(code); setLangOpen(false); }}
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                        textAlign: "left",
+                        padding: "0.65rem 1rem",
+                        fontFamily: "var(--font-hedvig)",
+                        fontSize: "0.8rem",
+                        letterSpacing: "0.05em",
+                        color: code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.7)",
+                        borderBottom: "1px solid rgba(255,255,255,0.05)",
+                        transition: "color 0.15s",
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.7)")}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
 
-            {langOpen && (
-              <div
+            {isMobile && (
+              <button
+                onClick={() => setMenuOpen((v) => !v)}
+                aria-label={menuOpen ? "Close menu" : "Open menu"}
                 style={{
-                  position: "absolute",
-                  top: "calc(100% + 8px)",
-                  right: 0,
-                  background: "rgba(10,10,10,0.96)",
-                  backdropFilter: "blur(16px)",
-                  WebkitBackdropFilter: "blur(16px)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  minWidth: "130px",
-                  zIndex: 300,
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  padding: "6px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  zIndex: 110,
+                  position: "relative",
                 }}
-                onMouseLeave={() => setLangOpen(false)}
               >
-                {LOCALES.map(({ code, label }) => (
-                  <button
-                    key={code}
-                    onClick={() => { setLocale(code); setLangOpen(false); }}
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      background: "none",
-                      border: "none",
-                      cursor: "pointer",
-                      textAlign: "left",
-                      padding: "0.65rem 1rem",
-                      fontFamily: "var(--font-hedvig)",
-                      fontSize: "0.8rem",
-                      letterSpacing: "0.05em",
-                      color: code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.7)",
-                      borderBottom: "1px solid rgba(255,255,255,0.05)",
-                      transition: "color 0.15s",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.7)")}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
+                <span ref={line1Ref} style={{ display: "block", width: 26, height: 1.5, background: "#ffffff", transformOrigin: "center", borderRadius: 2 }} />
+                <span ref={line2Ref} style={{ display: "block", width: 26, height: 1.5, background: "#ffffff", transformOrigin: "center", borderRadius: 2 }} />
+                <span ref={line3Ref} style={{ display: "block", width: 26, height: 1.5, background: "#ffffff", transformOrigin: "center", borderRadius: 2 }} />
+              </button>
             )}
           </div>
-
-          {/* Hamburger */}
-          {isMobile && (
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: "6px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "6px",
-                zIndex: 110,
-                position: "relative",
-              }}
-            >
-              <span
-                ref={line1Ref}
-                style={{
-                  display: "block",
-                  width: 26,
-                  height: 1.5,
-                  background: "#ffffff",
-                  transformOrigin: "center",
-                  borderRadius: 2,
-                }}
-              />
-              <span
-                ref={line2Ref}
-                style={{
-                  display: "block",
-                  width: 26,
-                  height: 1.5,
-                  background: "#ffffff",
-                  transformOrigin: "center",
-                  borderRadius: 2,
-                }}
-              />
-              <span
-                ref={line3Ref}
-                style={{
-                  display: "block",
-                  width: 26,
-                  height: 1.5,
-                  background: "#ffffff",
-                  transformOrigin: "center",
-                  borderRadius: 2,
-                }}
-              />
-            </button>
-          )}
         </div>
       </nav>
 
@@ -386,7 +401,6 @@ export default function Navbar() {
           overflow: "hidden",
         }}
       >
-        {/* Background — black with progressive blur */}
         <div
           ref={overlayBgRef}
           style={{
@@ -399,18 +413,15 @@ export default function Navbar() {
           }}
         />
 
-        {/* Subtle diagonal grain texture via gradient */}
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background:
-              "radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.03) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.03) 0%, transparent 60%)",
             pointerEvents: "none",
           }}
         />
 
-        {/* Links — centered */}
         <div
           style={{
             position: "relative",
@@ -452,7 +463,6 @@ export default function Navbar() {
             </a>
           ))}
 
-          {/* Footer detail inside overlay */}
           <div
             style={{
               position: "absolute",
@@ -490,3 +500,6 @@ export default function Navbar() {
     </>
   );
 }
+
+// suppress unused import warning
+void navHrefs;
