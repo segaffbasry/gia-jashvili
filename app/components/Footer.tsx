@@ -93,7 +93,7 @@ export default function Footer() {
             marginTop: "2.5rem",
           }}
         >
-          <span style={{ ...labelStyle, color: "rgba(255,255,255,0.4)" }}>2025</span>
+          <span style={{ ...labelStyle, color: "rgba(255,255,255,0.4)" }}>2026</span>
           <span style={{ ...labelStyle, color: "rgba(255,255,255,0.4)" }}>© GIA JASHVILI</span>
         </div>
       </footer>
@@ -168,7 +168,7 @@ export default function Footer() {
           gap: "2rem",
         }}
       >
-        <div style={{ ...labelStyle, color: "rgba(255,255,255,0.4)" }}>2025</div>
+        <div style={{ ...labelStyle, color: "rgba(255,255,255,0.4)" }}>2026</div>
         <div />
         <div style={{ ...labelStyle, color: "rgba(255,255,255,0.4)" }}>© GIA JASHVILI</div>
       </div>

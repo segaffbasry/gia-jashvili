@@ -36,7 +36,7 @@ export default function Hero() {
         .split("")
         .map((ch) =>
           ch === " "
-            ? `<span style="display:inline-block;width:0.35em"> </span>`
+            ? `<span style="display:inline-block;width:0.55em"> </span>`
             : `<span style="display:inline-block;overflow:hidden;vertical-align:bottom;line-height:1.15"><span class="hl" style="display:inline-block">${ch}</span></span>`
         )
         .join("");
@@ -119,27 +119,17 @@ export default function Hero() {
 
           <div ref={subtitleRef} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem" }}>
             {titles.map((title) => (
-              <div key={title} style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
-                <svg width="20" height="8" viewBox="0 0 20 8" fill="none" style={{ opacity: 0.7, flexShrink: 0 }}>
-                  <line x1="0" y1="4" x2="14" y2="4" stroke="var(--color-accent)" strokeWidth="0.8"/>
-                  <polygon points="15,4 19,1.5 19,6.5" fill="var(--color-accent)" opacity="0.7"/>
-                </svg>
-                <span style={{
-                  fontFamily: '"Hedvig Letters Serif", serif',
-                  color: "var(--color-accent)",
-                  fontSize: "clamp(0.6rem, 2.8vw, 11px)",
-                  fontWeight: 400,
-                  letterSpacing: "0.28em",
-                  textTransform: "uppercase",
-                  whiteSpace: "nowrap",
-                }}>
-                  {title}
-                </span>
-                <svg width="20" height="8" viewBox="0 0 20 8" fill="none" style={{ opacity: 0.7, flexShrink: 0 }}>
-                  <polygon points="1,4 5,1.5 5,6.5" fill="var(--color-accent)" opacity="0.7"/>
-                  <line x1="6" y1="4" x2="20" y2="4" stroke="var(--color-accent)" strokeWidth="0.8"/>
-                </svg>
-              </div>
+              <span key={title} style={{
+                fontFamily: '"Hedvig Letters Serif", serif',
+                color: "rgba(255,255,255,0.7)",
+                fontSize: "clamp(0.6rem, 2.8vw, 11px)",
+                fontWeight: 400,
+                letterSpacing: "0.28em",
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+              }}>
+                {title}
+              </span>
             ))}
           </div>
         </div>
