@@ -68,10 +68,10 @@ function LangDropdown({ locale, setLocale, langOpen, setLangOpen }: {
         style={{
           background: "none", border: "none", cursor: "pointer",
           display: "flex", alignItems: "center", gap: "0.35rem",
-          color: langOpen ? "#9B6057" : "rgba(255,255,255,0.75)",
+          color: langOpen ? "#cac2b6" : "rgba(255,255,255,0.75)",
           padding: "4px 6px", transition: "color 0.2s",
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "#9B6057")}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "#cac2b6")}
         onMouseLeave={(e) => { if (!langOpen) e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
       >
         <Languages size={16} strokeWidth={1.5} />
@@ -98,7 +98,7 @@ function LangDropdown({ locale, setLocale, langOpen, setLangOpen }: {
         onMouseLeave={() => setLangOpen(false)}
       >
         {/* top accent line */}
-        <div style={{ height: "1px", background: "linear-gradient(to right, transparent, #9B6057, transparent)" }} />
+        <div style={{ height: "1px", background: "linear-gradient(to right, transparent, #cac2b6, transparent)" }} />
         {LOCALES.map(({ code, label }, i) => (
           <button
             key={code}
@@ -109,14 +109,14 @@ function LangDropdown({ locale, setLocale, langOpen, setLangOpen }: {
               width: "100%", background: "none", border: "none", cursor: "pointer",
               textAlign: "left", padding: "0.65rem 1rem",
               fontFamily: "var(--font-hedvig)", fontSize: "0.78rem", letterSpacing: "0.05em",
-              color: code === locale ? "#9B6057" : "rgba(255,255,255,0.6)",
+              color: code === locale ? "#cac2b6" : "rgba(255,255,255,0.6)",
               borderBottom: i < LOCALES.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
               transition: "color 0.15s, padding-left 0.2s",
             }}
             onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; e.currentTarget.style.paddingLeft = "1.3rem"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = code === locale ? "#9B6057" : "rgba(255,255,255,0.6)"; e.currentTarget.style.paddingLeft = "1rem"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = code === locale ? "#cac2b6" : "rgba(255,255,255,0.6)"; e.currentTarget.style.paddingLeft = "1rem"; }}
           >
-            {code === locale && <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#9B6057", flexShrink: 0 }} />}
+            {code === locale && <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "#cac2b6", flexShrink: 0 }} />}
             {label}
           </button>
         ))}
@@ -170,7 +170,7 @@ function NavLink({ label, href, onClick }: { label: string; href: string; onClic
           <span key={i} style={{ display: "inline-block", overflow: "hidden", position: "relative", verticalAlign: "top", ...FONT }}>
             <span style={{ visibility: "hidden" }}>{ch}</span>
             <span className="nl-d" style={{ position: "absolute", inset: 0, color: "rgba(255,255,255,0.88)" }}>{ch}</span>
-            <span className="nl-h" style={{ position: "absolute", inset: 0, color: "#9B6057", fontStyle: "italic" }}>{ch}</span>
+            <span className="nl-h" style={{ position: "absolute", inset: 0, color: "#cac2b6", fontStyle: "italic" }}>{ch}</span>
           </span>
         ))}
       </a>
@@ -180,7 +180,7 @@ function NavLink({ label, href, onClick }: { label: string; href: string; onClic
           display: "block",
           width: "100%",
           height: "1px",
-          background: "#9B6057",
+          background: "#cac2b6",
           marginTop: "3px",
           transformOrigin: "right center",
           transform: "scaleX(0)",
