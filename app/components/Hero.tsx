@@ -112,9 +112,9 @@ export default function Hero() {
           </h1>
 
           <div ref={lineRef} style={{ width: "clamp(160px, 50vw, 360px)", margin: "1.2rem auto", position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 0%, rgba(185,166,153,0.2) 20%, rgba(185,166,153,0.45) 50%, rgba(185,166,153,0.2) 80%, transparent 100%)", filter: "blur(5px)" }} />
-            <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent 0%, rgba(185,166,153,0.5) 15%, #b9a699 38%, #d8cdc8 50%, #b9a699 62%, rgba(185,166,153,0.5) 85%, transparent 100%)" }} />
-            <div style={{ position: "absolute", top: "50%", left: "35%", right: "35%", height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent, rgba(185,166,153,0.9), #ffffff, rgba(185,166,153,0.9), transparent)", opacity: 0.75 }} />
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 0%, rgba(135,122,114,0.2) 20%, rgba(135,122,114,0.45) 50%, rgba(135,122,114,0.2) 80%, transparent 100%)", filter: "blur(5px)" }} />
+            <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent 0%, rgba(135,122,114,0.5) 15%, #877a72 38%, #a09690 50%, #877a72 62%, rgba(135,122,114,0.5) 85%, transparent 100%)" }} />
+            <div style={{ position: "absolute", top: "50%", left: "35%", right: "35%", height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent, rgba(135,122,114,0.9), #ffffff, rgba(135,122,114,0.9), transparent)", opacity: 0.75 }} />
           </div>
 
           <div ref={subtitleRef} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem" }}>
@@ -186,9 +186,9 @@ export default function Hero() {
         </h1>
 
         <div ref={lineRef} style={{ width: "clamp(200px, 40vw, 480px)", margin: "0.6rem 60px 1.2rem 0", alignSelf: "flex-end", position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 0%, rgba(185,166,153,0.2) 20%, rgba(185,166,153,0.45) 50%, rgba(185,166,153,0.2) 80%, transparent 100%)", filter: "blur(5px)" }} />
-          <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent 0%, rgba(185,166,153,0.5) 15%, #b9a699 38%, #d8cdc8 50%, #b9a699 62%, rgba(185,166,153,0.5) 85%, transparent 100%)" }} />
-          <div style={{ position: "absolute", top: "50%", left: "35%", right: "35%", height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent, rgba(185,166,153,0.9), #ffffff, rgba(185,166,153,0.9), transparent)", opacity: 0.75 }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 0%, rgba(135,122,114,0.2) 20%, rgba(135,122,114,0.45) 50%, rgba(135,122,114,0.2) 80%, transparent 100%)", filter: "blur(5px)" }} />
+          <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent 0%, rgba(135,122,114,0.5) 15%, #877a72 38%, #a09690 50%, #877a72 62%, rgba(135,122,114,0.5) 85%, transparent 100%)" }} />
+          <div style={{ position: "absolute", top: "50%", left: "35%", right: "35%", height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent, rgba(135,122,114,0.9), #ffffff, rgba(135,122,114,0.9), transparent)", opacity: 0.75 }} />
         </div>
 
           <div ref={subtitleRef} style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "2rem", alignSelf: "flex-end", marginRight: "55px" }}>
