@@ -10,9 +10,11 @@ const navHrefs = ["#home", "#about", "#events", "#gallery", "#teaching", "#conta
 
 const LOCALES: { code: Locale; label: string }[] = [
   { code: "en", label: "English" },
+  { code: "de", label: "Deutsch" },
   { code: "id", label: "Indonesia" },
   { code: "zh", label: "中文" },
   { code: "ja", label: "日本語" },
+  { code: "ka", label: "ქართული" },
 ];
 
 const FONT: React.CSSProperties = {

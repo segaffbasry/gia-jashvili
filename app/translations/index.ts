@@ -1,4 +1,4 @@
-export type Locale = "en" | "id" | "zh" | "ja";
+export type Locale = "en" | "id" | "zh" | "ja" | "ka" | "de";
 
 export const translations = {
   en: {
@@ -198,6 +198,106 @@ export const translations = {
       contact: "お問い合わせ",
       socials: "ソーシャル",
       toTop: "トップへ",
+    },
+  },
+
+  ka: {
+    nav: {
+      home: "მთავარი",
+      biography: "ბიოგრაფია",
+      concerts: "კონცერტები",
+      gallery: "გალერეა",
+      teaching: "სწავლება",
+      contact: "კონტაქტი",
+    },
+    hero: {
+      violinist: "მევიოლინე",
+      concertmaster: "კონცერტმაისტერი",
+      artisticDirector: "მხატვრული დირექტორი",
+    },
+    quote: "„რუსული სკრიპალთა სკოლის გამომხატველობითი სიღრმე და ვენური ტრადიციის კეთილშობილური ელეგანტობა — ერთ ხმაში."",
+    biography: {
+      p1: "გია ჯაშვილი — ავსტრიელი მევიოლინე ქართული წარმოშობით, რომლის კარიერამ მას მსოფლიოს ყველაზე პრესტიჟულ სცენებზე მიაყვანა — კარნეგი ჰოლი, ვენის მუზიკფერაინი, სიდნეის საოპერო თეატრი, ბერლინის ფილარმონია და ტოკიოს სუნტორი ჰოლი. მან ითამაშა ისეთ დირიჟორებთან, როგორებიც არიან კლაუდიო აბადო, ლორინ მააზელი, მარის იანსონსი, ზუბინ მეჰტა, რიკარდო მუტი, ბერნარდ ჰაიტინკი და სერ სიმონ რატლი. 2006 წელს ლორინ მააზელმა ის ვალენსიის პალაუ დე ლეს არტს რეინა სოფიას კონცერტმაისტრად დანიშნა, სადაც მან პლასიდო დომინგოსა და ვალტრაუდ მაიერთან ერთად მნიშვნელოვან საოპერო პოსტანოვკებში მიიღო მონაწილეობა, მათ შორის ვაგნერის „ნიბელუნგის ბეჭედი" ზუბინ მეჰტას დირიჟორობით.",
+      p2: "მუსიკოსთა ოჯახში დაბადებული გია სწავლობდა ზახარ ბრონთან კოლნში და გერჰარდ შულცთან ვენაში. ათ წელზე მეტი ხნის განმავლობაში მას ხელმძღვანელობდა ლეგენდარული ივრი გიტლისი. 2015 წელს მან დააარსა მიუნხენის კამერული სოლისტები, რომლის დებიუტი მან თავად წარმართა გრემის პრემიის ლაურეატ მევიოლინე ჯოშუა ბელთან ერთად. საქართველო განსაკუთრებულ ადგილს იკავებს მის მუსიკალურ გზაზე — იგი რეგულარულად სტუმრობს თბილისს და თანამშრომლობს ქართველ მუსიკოსებთან.",
+    },
+    events: {
+      calendar: "კალენდარი",
+      tickets: "ბილეთები",
+      country: "ინდონეზია",
+      videoCaption: `დალილას არია „Mon coeur s'ouvre a ta voix" — გია ჯაშვილი და ქართული სინფონიეტა`,
+    },
+    contact: {
+      heading: "კონტაქტი",
+      label: "პირდაპირი მიმართვა",
+      description: "ზოგადი და საკონცერტო შეკითხვები",
+    },
+    teaching: {
+      heading: "სწავლება და მასტერკლასები",
+      body: "გია შთამაგონებელი მასწავლებელი და მენტორია, რომელიც ევროპისა და აზიის კონსერვატორიებში სტუდენტებს ხელმძღვანელობს. ის მიიჩნევს, რომ სწავლება და სცენაზე გამოსვლა ერთი ფესვიდან იზრდება: მუსიკის სიმშვენიერის ჩვენება; სიუხვე, სიწრფელე და მოთმინება; სხვებისთვის კარის გაღება.",
+      quote: "რატომ მუსიკა? იმიტომ, რომ ის გიბრძანებს — დააკვირდე, გაიგე, თანაგრძნო და იმოქმედე. ის გხდის უკეთეს ადამიანს.",
+    },
+    gallery: {
+      items: [
+        { label: "ივრი გიტლისთან", sub: "სანქტ-პეტერბურგი, 2023" },
+        { label: "ჯოშუა ბელთან", sub: "2023" },
+        { label: "კონცერტი იაპონიაში", sub: "ტოკიო, 2023" },
+        { label: "სოლო კონცერტი", sub: "თბილისი, საქართველო" },
+      ],
+    },
+    footer: {
+      contact: "კონტაქტი",
+      socials: "სოციალური მედია",
+      toTop: "მაღლა",
+    },
+  },
+
+  de: {
+    nav: {
+      home: "Startseite",
+      biography: "Biografie",
+      concerts: "Konzerte",
+      gallery: "Galerie",
+      teaching: "Unterricht",
+      contact: "Kontakt",
+    },
+    hero: {
+      violinist: "Violinist",
+      concertmaster: "Konzertmeister",
+      artisticDirector: "Künstlerischer Leiter",
+    },
+    quote: "„Die ausdrucksstarke Intensität der russischen Violinschule vereint mit der Eleganz der Wiener Tradition."",
+    biography: {
+      p1: "Gia Jashvili ist ein österreichischer Violinist georgischer Herkunft, dessen Karriere ihn auf die bedeutendsten Bühnen der Welt geführt hat — Carnegie Hall, Wiener Musikverein, Sydney Opera House, Berliner Philharmonie und Suntory Hall Tokyo. Er hat unter Dirigenten wie Claudio Abbado, Lorin Maazel, Mariss Jansons, Zubin Mehta, Riccardo Muti, Bernard Haitink und Sir Simon Rattle musiziert. 2006 ernannte ihn Lorin Maazel zum Konzertmeister am Palau de les Arts Reina Sofía in Valencia, wo er mit Plácido Domingo und Waltraud Meier in bedeutenden Opernproduktionen zusammenarbeitete, darunter Wagners Ring-Zyklus unter Zubin Mehta.",
+      p2: "In eine Musikerfamilie hineingeboren, studierte Gia bei Zakhar Bron in Köln und bei Gerhard Schulz vom Alban Berg Quartett in Wien. Über ein Jahrzehnt wurde er vom legendären Ivry Gitlis betreut. 2015 gründete er die Münchener Kammersolisten, deren Debüt er als Solist neben dem Grammy-Preisträger Joshua Bell leitete. Indonesien nimmt einen besonderen Platz in seiner musikalischen Reise ein — er hat mit der Jakarta Sinfonietta unter Maestro Iswargia R. Sudarno gespielt sowie in Yogyakarta und Bali.",
+    },
+    events: {
+      calendar: "Kalender",
+      tickets: "Tickets",
+      country: "Indonesien",
+      videoCaption: `Dalilahs Arie „Mon coeur s'ouvre a ta voix" — Gia Jashvili & Georgian Sinfonietta`,
+    },
+    contact: {
+      heading: "Kontakt",
+      label: "Direkte Anfragen",
+      description: "Allgemeine & Konzertanfragen",
+    },
+    teaching: {
+      heading: "Unterricht & Meisterkurse",
+      body: "Gia ist ein inspirierender Lehrer und Mentor, der Studierende an Konservatorien in Europa und Asien begleitet. Er glaubt, dass Unterrichten und Auftreten dieselbe Wurzel haben: die Schönheit der Musik zu zeigen; großzügig, aufrichtig und geduldig zu sein; anderen Türen zu öffnen und sie aus eigenem Willen hindurchgehen zu lassen.",
+      quote: "Warum Musik? Weil sie verlangt, dass du beobachtest, verstehst, mitfühlst und handelst. Sie macht dich zu einem besseren Menschen.",
+    },
+    gallery: {
+      items: [
+        { label: "Mit Ivry Gitlis", sub: "St. Petersburg, 2023" },
+        { label: "Mit Joshua Bell", sub: "2023" },
+        { label: "Konzert in Japan", sub: "Tokio, 2023" },
+        { label: "Soloauftritt", sub: "Tiflis, Georgien" },
+      ],
+    },
+    footer: {
+      contact: "Kontakt",
+      socials: "Soziale Medien",
+      toTop: "Nach oben",
     },
   },
 };
