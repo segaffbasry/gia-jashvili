@@ -24,6 +24,7 @@ export const translations = {
       calendar: "Calendar",
       tickets: "tickets",
       country: "Indonesia",
+      videoCaption: `Dalilah’s aria “Mon coeur s’ouvre a ta voix” — Gia Jashvili & Georgian Sinfonietta`,
     },
     contact: {
       heading: "Contact",
@@ -73,6 +74,7 @@ export const translations = {
       calendar: "Kalender",
       tickets: "tiket",
       country: "Indonesia",
+      videoCaption: `Aria Dalilah “Mon coeur s’ouvre a ta voix” — Gia Jashvili & Georgian Sinfonietta`,
     },
     contact: {
       heading: "Kontak",
@@ -122,6 +124,7 @@ export const translations = {
       calendar: "演出日历",
       tickets: "购票",
       country: "印度尼西亚",
+      videoCaption: "达利拉咏叹调《Mon coeur s'ouvre a ta voix》— 贾·贾什维利与格鲁吉亚室内乐团",
     },
     contact: {
       heading: "联系",
@@ -171,6 +174,7 @@ export const translations = {
       calendar: "カレンダー",
       tickets: "チケット",
       country: "インドネシア",
+      videoCaption: "ダリラのアリア《Mon coeur s'ouvre a ta voix》— ギア・ジャシュヴィリ & グルジア・シンフォニエッタ",
     },
     contact: {
       heading: "お問い合わせ",

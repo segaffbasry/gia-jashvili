@@ -9,6 +9,7 @@ export default function Hero() {
   const { t } = useLanguage();
   const nameRef     = useRef<HTMLHeadingElement>(null);
   const subtitleRef = useRef<HTMLDivElement>(null);
+  const lineRef     = useRef<HTMLDivElement>(null);
   const imgRef      = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -26,26 +27,38 @@ export default function Hero() {
 
     if (imgRef.current) {
       gsap.set(imgRef.current, { opacity: 0 });
-      tl.to(imgRef.current, { opacity: 1, duration: 1.6 }, 0);
+      tl.to(imgRef.current, { opacity: 1, duration: 2 }, 0);
     }
 
     if (nameRef.current) {
-      const words = nameRef.current.innerText.split(/(\s+)/);
-      nameRef.current.innerHTML = words
-        .map((w) =>
-          /^\s+$/.test(w)
-            ? w
-            : `<span style="display:inline-block;overflow:hidden;vertical-align:bottom;line-height:1.1"><span class="hw" style="display:inline-block">${w}</span></span>`
+      const text = nameRef.current.innerText;
+      nameRef.current.innerHTML = text
+        .split("")
+        .map((ch) =>
+          ch === " "
+            ? `<span style="display:inline-block;width:0.35em"> </span>`
+            : `<span style="display:inline-block;overflow:hidden;vertical-align:bottom;line-height:1.15"><span class="hl" style="display:inline-block">${ch}</span></span>`
         )
         .join("");
-      const spans = nameRef.current.querySelectorAll<HTMLElement>(".hw");
-      gsap.set(spans, { y: "110%" });
-      tl.to(spans, { y: "0%", duration: 1.1, stagger: 0.14 }, 0.5);
+      const letters = nameRef.current.querySelectorAll<HTMLElement>(".hl");
+      gsap.set(letters, { y: "115%", opacity: 0 });
+      tl.to(letters, {
+        y: "0%",
+        opacity: 1,
+        duration: 1.0,
+        stagger: 0.045,
+        ease: "power3.out",
+      }, 0.3);
+    }
+
+    if (lineRef.current) {
+      gsap.set(lineRef.current, { scaleX: 0, opacity: 0, transformOrigin: "center center" });
+      tl.to(lineRef.current, { scaleX: 1, opacity: 1, duration: 1.0, ease: "power3.inOut" }, 1.2);
     }
 
     if (subtitleRef.current) {
-      gsap.set(subtitleRef.current, { y: "110%" });
-      tl.to(subtitleRef.current, { y: "0%", duration: 0.9 }, 1.1);
+      gsap.set(subtitleRef.current, { opacity: 0 });
+      tl.to(subtitleRef.current, { opacity: 1, duration: 1.2, ease: "power2.out" }, 1.5);
     }
   }, [isMobile]);
 
@@ -53,19 +66,33 @@ export default function Hero() {
     return (
       <section
         id="home"
-        style={{ background: "#000", minHeight: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }}
+        style={{ background: "#000", minHeight: "100vh", position: "relative", overflow: "hidden" }}
       >
-        {/* Top half — black + centered text */}
+        {/* Full-bleed background image */}
+        <div ref={imgRef} style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <Image
+            src="/hero-mobile.png"
+            alt="Gia Jashvili"
+            fill
+            style={{ objectFit: "cover", objectPosition: "center top" }}
+            priority
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.5) 100%)" }} />
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "160px", background: "linear-gradient(to bottom, transparent 0%, #000000 100%)" }} />
+        </div>
+
+        {/* Text overlay */}
         <div
           style={{
-            flex: 1,
-            background: "#000000",
+            position: "relative",
+            zIndex: 10,
+            minHeight: "100vh",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             textAlign: "center",
-            padding: "5rem 6% 2rem",
+            padding: "6rem 6% 4rem",
           }}
         >
           <h1
@@ -84,24 +111,23 @@ export default function Hero() {
             Gia Jashvili
           </h1>
 
-          <div ref={subtitleRef} style={{ display: "flex", alignItems: "center", gap: "0.9rem" }}>
-            {/* Left deco line */}
-            <svg width="36" height="8" viewBox="0 0 36 8" fill="none" style={{ opacity: 0.8, flexShrink: 0 }}>
-              <line x1="0" y1="4" x2="28" y2="4" stroke="var(--color-accent)" strokeWidth="0.8"/>
-              <polygon points="30,4 34,1.5 34,6.5" fill="var(--color-accent)" opacity="0.7"/>
-            </svg>
+          <div ref={lineRef} style={{ width: "clamp(160px, 50vw, 360px)", margin: "1.2rem auto", position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
+            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 0%, rgba(185,166,153,0.2) 20%, rgba(185,166,153,0.45) 50%, rgba(185,166,153,0.2) 80%, transparent 100%)", filter: "blur(5px)" }} />
+            <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent 0%, rgba(185,166,153,0.5) 15%, #b9a699 38%, #d8cdc8 50%, #b9a699 62%, rgba(185,166,153,0.5) 85%, transparent 100%)" }} />
+            <div style={{ position: "absolute", top: "50%", left: "35%", right: "35%", height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent, rgba(185,166,153,0.9), #ffffff, rgba(185,166,153,0.9), transparent)", opacity: 0.75 }} />
+          </div>
 
-            {titles.map((title, i) => (
+          <div ref={subtitleRef} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem" }}>
+            {titles.map((title) => (
               <div key={title} style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
-                {i > 0 && (
-                  <svg width="6" height="6" viewBox="0 0 6 6" fill="none" style={{ flexShrink: 0 }}>
-                    <rect x="3" y="0" width="4.24" height="4.24" transform="rotate(45 3 0)" fill="var(--color-accent)" opacity="0.7"/>
-                  </svg>
-                )}
+                <svg width="20" height="8" viewBox="0 0 20 8" fill="none" style={{ opacity: 0.7, flexShrink: 0 }}>
+                  <line x1="0" y1="4" x2="14" y2="4" stroke="var(--color-accent)" strokeWidth="0.8"/>
+                  <polygon points="15,4 19,1.5 19,6.5" fill="var(--color-accent)" opacity="0.7"/>
+                </svg>
                 <span style={{
                   fontFamily: '"Hedvig Letters Serif", serif',
                   color: "var(--color-accent)",
-                  fontSize: "clamp(0.65rem, 2.5vw, 12px)",
+                  fontSize: "clamp(0.6rem, 2.8vw, 11px)",
                   fontWeight: 400,
                   letterSpacing: "0.28em",
                   textTransform: "uppercase",
@@ -109,28 +135,13 @@ export default function Hero() {
                 }}>
                   {title}
                 </span>
+                <svg width="20" height="8" viewBox="0 0 20 8" fill="none" style={{ opacity: 0.7, flexShrink: 0 }}>
+                  <polygon points="1,4 5,1.5 5,6.5" fill="var(--color-accent)" opacity="0.7"/>
+                  <line x1="6" y1="4" x2="20" y2="4" stroke="var(--color-accent)" strokeWidth="0.8"/>
+                </svg>
               </div>
             ))}
-
-            {/* Right deco line */}
-            <svg width="36" height="8" viewBox="0 0 36 8" fill="none" style={{ opacity: 0.8, flexShrink: 0 }}>
-              <polygon points="2,4 6,1.5 6,6.5" fill="var(--color-accent)" opacity="0.7"/>
-              <line x1="8" y1="4" x2="36" y2="4" stroke="var(--color-accent)" strokeWidth="0.8"/>
-            </svg>
           </div>
-        </div>
-
-        {/* Bottom half — image */}
-        <div ref={imgRef} style={{ height: "60vh", position: "relative", overflow: "hidden" }}>
-          <Image
-            src="/hero-mobile.png"
-            alt="Gia Jashvili"
-            fill
-            style={{ objectFit: "cover", objectPosition: "25% center" }}
-            priority
-          />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 40%)" }} />
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "120px", background: "linear-gradient(to bottom, transparent 0%, #000000 100%)" }} />
         </div>
       </section>
     );
@@ -146,7 +157,7 @@ export default function Hero() {
           src="/hero-desktop.png"
           alt="Gia Jashvili"
           fill
-          style={{ objectFit: "cover", objectPosition: "40% 30%" }}
+          style={{ objectFit: "cover", objectPosition: "40% 15%" }}
           priority
         />
 
@@ -162,9 +173,9 @@ export default function Hero() {
           zIndex: 10,
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "flex-end",
           justifyContent: "center",
-          textAlign: "center",
+          textAlign: "right",
           padding: "0 6%",
         }}
       >
@@ -178,13 +189,19 @@ export default function Hero() {
             lineHeight: "1.2",
             letterSpacing: "0.06em",
             textTransform: "uppercase",
-            marginBottom: "1.6rem",
+            marginBottom: "1.2rem",
           }}
         >
           Gia Jashvili
         </h1>
 
-          <div ref={subtitleRef} style={{ display: "flex", alignItems: "center", gap: "0.9rem" }}>
+        <div ref={lineRef} style={{ width: "clamp(200px, 40vw, 480px)", margin: "0.6rem 60px 1.2rem 0", alignSelf: "flex-end", position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, transparent 0%, rgba(185,166,153,0.2) 20%, rgba(185,166,153,0.45) 50%, rgba(185,166,153,0.2) 80%, transparent 100%)", filter: "blur(5px)" }} />
+          <div style={{ position: "absolute", top: "50%", left: 0, right: 0, height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent 0%, rgba(185,166,153,0.5) 15%, #b9a699 38%, #d8cdc8 50%, #b9a699 62%, rgba(185,166,153,0.5) 85%, transparent 100%)" }} />
+          <div style={{ position: "absolute", top: "50%", left: "35%", right: "35%", height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent, rgba(185,166,153,0.9), #ffffff, rgba(185,166,153,0.9), transparent)", opacity: 0.75 }} />
+        </div>
+
+          <div ref={subtitleRef} style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.9rem", alignSelf: "flex-end" }}>
             {/* Left deco line */}
             <svg width="36" height="8" viewBox="0 0 36 8" fill="none" style={{ opacity: 0.8, flexShrink: 0 }}>
               <line x1="0" y1="4" x2="28" y2="4" stroke="var(--color-accent)" strokeWidth="0.8"/>

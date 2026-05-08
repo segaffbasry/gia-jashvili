@@ -319,7 +319,9 @@ export default function Events() {
               </div>
 
               <a
-                href="#contact"
+                href="https://www.jcodigitalconcerthall.com/whispers-of-the-heart/"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   fontFamily: "var(--font-hedvig)",
                   color: "rgba(255,255,255,0.45)",

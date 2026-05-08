@@ -25,6 +25,104 @@ const FONT: React.CSSProperties = {
   whiteSpace: "pre" as const,
 };
 
+function LangDropdown({ locale, setLocale, langOpen, setLangOpen }: {
+  locale: Locale; setLocale: (l: Locale) => void;
+  langOpen: boolean; setLangOpen: (v: boolean) => void;
+}) {
+  const panelRef  = useRef<HTMLDivElement>(null);
+  const itemsRef  = useRef<(HTMLButtonElement | null)[]>([]);
+  const tweenRef  = useRef<gsap.core.Timeline | null>(null);
+
+  useEffect(() => {
+    if (!panelRef.current) return;
+    tweenRef.current?.kill();
+
+    if (langOpen) {
+      gsap.set(panelRef.current, { display: "block" });
+      const tl = gsap.timeline();
+      tl.fromTo(panelRef.current,
+        { clipPath: "inset(0 0 100% 0)", opacity: 0 },
+        { clipPath: "inset(0 0 0% 0)", opacity: 1, duration: 0.38, ease: "expo.out" }
+      );
+      tl.fromTo(itemsRef.current.filter(Boolean),
+        { y: 10, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.28, stagger: 0.055, ease: "power3.out" },
+        0.1
+      );
+      tweenRef.current = tl;
+    } else {
+      const tl = gsap.timeline({ onComplete: () => { if (panelRef.current) gsap.set(panelRef.current, { display: "none" }); } });
+      tl.to(itemsRef.current.filter(Boolean), { y: -6, opacity: 0, duration: 0.18, stagger: 0.03, ease: "power2.in" });
+      tl.to(panelRef.current, { clipPath: "inset(0 0 100% 0)", opacity: 0, duration: 0.28, ease: "expo.in" }, 0.06);
+      tweenRef.current = tl;
+    }
+  }, [langOpen]);
+
+  return (
+    <div style={{ position: "relative" }}>
+      <button
+        onClick={() => setLangOpen(!langOpen)}
+        aria-label="Select language"
+        style={{
+          background: "none", border: "none", cursor: "pointer",
+          display: "flex", alignItems: "center", gap: "0.35rem",
+          color: langOpen ? "var(--color-accent)" : "rgba(255,255,255,0.75)",
+          padding: "4px 6px", transition: "color 0.2s",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
+        onMouseLeave={(e) => { if (!langOpen) e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
+      >
+        <Languages size={16} strokeWidth={1.5} />
+        <span style={{ fontFamily: "var(--font-hedvig)", fontSize: "0.75rem", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+          {locale.toUpperCase()}
+        </span>
+      </button>
+
+      <div
+        ref={panelRef}
+        style={{
+          display: "none",
+          position: "absolute",
+          top: "calc(100% + 8px)",
+          right: 0,
+          background: "rgba(8,8,8,0.97)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid rgba(255,255,255,0.07)",
+          minWidth: "140px",
+          zIndex: 300,
+          overflow: "hidden",
+        }}
+        onMouseLeave={() => setLangOpen(false)}
+      >
+        {/* top accent line */}
+        <div style={{ height: "1px", background: "linear-gradient(to right, transparent, var(--color-accent), transparent)" }} />
+        {LOCALES.map(({ code, label }, i) => (
+          <button
+            key={code}
+            ref={(el) => { itemsRef.current[i] = el; }}
+            onClick={() => { setLocale(code); setLangOpen(false); }}
+            style={{
+              display: "flex", alignItems: "center", gap: "0.6rem",
+              width: "100%", background: "none", border: "none", cursor: "pointer",
+              textAlign: "left", padding: "0.65rem 1rem",
+              fontFamily: "var(--font-hedvig)", fontSize: "0.78rem", letterSpacing: "0.05em",
+              color: code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.6)",
+              borderBottom: i < LOCALES.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+              transition: "color 0.15s, padding-left 0.2s",
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "#ffffff"; e.currentTarget.style.paddingLeft = "1.3rem"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.6)"; e.currentTarget.style.paddingLeft = "1rem"; }}
+          >
+            {code === locale && <span style={{ width: "3px", height: "3px", borderRadius: "50%", background: "var(--color-accent)", flexShrink: 0 }} />}
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function NavLink({ label, href, onClick }: { label: string; href: string; onClick: () => void }) {
   const wrapperRef = useRef<HTMLAnchorElement>(null);
   const lineRef    = useRef<HTMLSpanElement>(null);
@@ -33,7 +131,7 @@ function NavLink({ label, href, onClick }: { label: string; href: string; onClic
     if (!wrapperRef.current) return;
     gsap.set(wrapperRef.current.querySelectorAll<HTMLElement>(".nl-d"), { yPercent: 0 });
     gsap.set(wrapperRef.current.querySelectorAll<HTMLElement>(".nl-h"), { yPercent: 100 });
-    gsap.set(lineRef.current, { scaleX: 0, transformOrigin: "right center" });
+    if (lineRef.current) gsap.set(lineRef.current, { scaleX: 0 });
   }, [label]);
 
   const enter = () => {
@@ -57,38 +155,36 @@ function NavLink({ label, href, onClick }: { label: string; href: string; onClic
   };
 
   return (
-    <a
-      ref={wrapperRef}
-      href={href}
-      onClick={(e) => { e.preventDefault(); onClick(); }}
-      onMouseEnter={enter}
-      onMouseLeave={leave}
-      style={{ display: "inline-flex", cursor: "pointer", textDecoration: "none", gap: 0, position: "relative" }}
-    >
-      {label.split("").map((ch, i) => (
-        <span key={i} style={{ display: "inline-block", overflow: "hidden", position: "relative", verticalAlign: "top", ...FONT }}>
-          {/* sizer — sets clip box dimensions, invisible */}
-          <span style={{ visibility: "hidden" }}>{ch}</span>
-          {/* default char */}
-          <span className="nl-d" style={{ position: "absolute", inset: 0, color: "rgba(255,255,255,0.88)" }}>{ch}</span>
-          {/* hover char */}
-          <span className="nl-h" style={{ position: "absolute", inset: 0, color: "var(--color-accent)", fontStyle: "italic" }}>{ch}</span>
-        </span>
-      ))}
+    <div style={{ position: "relative", display: "inline-block" }}>
+      <a
+        ref={wrapperRef}
+        href={href}
+        onClick={(e) => { e.preventDefault(); onClick(); }}
+        onMouseEnter={enter}
+        onMouseLeave={leave}
+        style={{ display: "inline-flex", cursor: "pointer", textDecoration: "none", gap: 0 }}
+      >
+        {label.split("").map((ch, i) => (
+          <span key={i} style={{ display: "inline-block", overflow: "hidden", position: "relative", verticalAlign: "top", ...FONT }}>
+            <span style={{ visibility: "hidden" }}>{ch}</span>
+            <span className="nl-d" style={{ position: "absolute", inset: 0, color: "rgba(255,255,255,0.88)" }}>{ch}</span>
+            <span className="nl-h" style={{ position: "absolute", inset: 0, color: "var(--color-accent)", fontStyle: "italic" }}>{ch}</span>
+          </span>
+        ))}
+      </a>
       <span
         ref={lineRef}
         style={{
-          position: "absolute",
-          bottom: "-3px",
-          left: 0,
+          display: "block",
           width: "100%",
           height: "1px",
           background: "var(--color-accent)",
-          display: "block",
+          marginTop: "3px",
           transformOrigin: "right center",
+          transform: "scaleX(0)",
         }}
       />
-    </a>
+    </div>
   );
 }
 
@@ -294,73 +390,7 @@ export default function Navbar() {
 
           {/* Language switcher + hamburger group */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginLeft: isMobile ? "auto" : 0 }}>
-            <div style={{ position: "relative" }}>
-              <button
-                onClick={() => setLangOpen((v) => !v)}
-                aria-label="Select language"
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "0.35rem",
-                  color: langOpen ? "var(--color-accent)" : "rgba(255,255,255,0.75)",
-                  padding: "4px 6px",
-                  transition: "color 0.2s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--color-accent)")}
-                onMouseLeave={(e) => { if (!langOpen) e.currentTarget.style.color = "rgba(255,255,255,0.75)"; }}
-              >
-                <Languages size={16} strokeWidth={1.5} />
-                <span style={{ fontFamily: "var(--font-hedvig)", fontSize: "0.75rem", letterSpacing: "0.06em", textTransform: "uppercase" }}>
-                  {locale.toUpperCase()}
-                </span>
-              </button>
-
-              {langOpen && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "calc(100% + 8px)",
-                    right: 0,
-                    background: "rgba(10,10,10,0.96)",
-                    backdropFilter: "blur(16px)",
-                    WebkitBackdropFilter: "blur(16px)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    minWidth: "130px",
-                    zIndex: 300,
-                  }}
-                  onMouseLeave={() => setLangOpen(false)}
-                >
-                  {LOCALES.map(({ code, label }) => (
-                    <button
-                      key={code}
-                      onClick={() => { setLocale(code); setLangOpen(false); }}
-                      style={{
-                        display: "block",
-                        width: "100%",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        textAlign: "left",
-                        padding: "0.65rem 1rem",
-                        fontFamily: "var(--font-hedvig)",
-                        fontSize: "0.8rem",
-                        letterSpacing: "0.05em",
-                        color: code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.7)",
-                        borderBottom: "1px solid rgba(255,255,255,0.05)",
-                        transition: "color 0.15s",
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = "#ffffff")}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = code === locale ? "var(--color-accent)" : "rgba(255,255,255,0.7)")}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <LangDropdown locale={locale} setLocale={setLocale} langOpen={langOpen} setLangOpen={setLangOpen} />
 
             {isMobile && (
               <button

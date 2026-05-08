@@ -9,23 +9,26 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function Quote() {
   const { t, locale } = useLanguage();
-  const sectionRef  = useRef<HTMLElement>(null);
-  const textRef     = useRef<HTMLDivElement>(null);
-  const charsRef    = useRef<HTMLSpanElement[]>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+  const textRef    = useRef<HTMLDivElement>(null);
+  const charsRef   = useRef<(HTMLSpanElement | null)[]>([]);
+
+  const chars: string[] = t.quote.split("");
 
   useEffect(() => {
-    charsRef.current = [];
-  }, [locale]);
+    // Refs are populated by the time this runs (after DOM commit)
+    const els = charsRef.current.filter((el): el is HTMLSpanElement => el !== null);
+    if (!els.length || !sectionRef.current) return;
 
-  useEffect(() => {
-    const chars = charsRef.current;
-    if (!chars.length || !sectionRef.current) return;
+    // Kill any previous ScrollTriggers on this section
+    ScrollTrigger.getAll().forEach((st) => {
+      if (st.vars.trigger === sectionRef.current) st.kill();
+    });
 
-    gsap.set(chars, { color: "rgba(255,255,255,0.12)" });
+    gsap.set(els, { color: "rgba(255,255,255,0.12)" });
+    if (textRef.current) textRef.current.style.opacity = "1";
 
-    ScrollTrigger.getAll().forEach((st) => st.kill());
-
-    ScrollTrigger.create({
+    const st = ScrollTrigger.create({
       trigger: sectionRef.current,
       start: "top top",
       end: "+=250%",
@@ -35,25 +38,21 @@ export default function Quote() {
         const p1 = Math.min(1, self.progress / 0.6);
         const p2 = Math.max(0, (self.progress - 0.6) / 0.4);
 
-        chars.forEach((c, i) => {
-          const cp = Math.min(1, Math.max(0, (p1 * chars.length - i) / (chars.length * 0.15)));
-          const r = Math.round(155 + (255 - 155) * cp);
-          const g = Math.round(96 + (255 - 96) * cp);
-          const b = Math.round(87 + (255 - 87) * cp);
-          const a = 0.12 + cp * 0.88;
+        els.forEach((c, i) => {
+          const cp = Math.min(1, Math.max(0, (p1 * els.length - i) / (els.length * 0.15)));
+          const r  = Math.round(155 + (255 - 155) * cp);
+          const g  = Math.round(96  + (255 - 96)  * cp);
+          const b  = Math.round(87  + (255 - 87)  * cp);
+          const a  = 0.12 + cp * 0.88;
           c.style.color = cp < 0.5 ? `rgba(${r},${g},${b},${a})` : `rgba(255,255,255,${a})`;
         });
 
-        if (textRef.current) {
-          textRef.current.style.opacity = String(1 - p2);
-        }
+        if (textRef.current) textRef.current.style.opacity = String(1 - p2);
       },
     });
 
-    return () => ScrollTrigger.getAll().forEach((st) => st.kill());
+    return () => st.kill();
   }, [locale]);
-
-  const chars: string[] = t.quote.split("");
 
   return (
     <section
@@ -82,7 +81,7 @@ export default function Quote() {
             {chars.map((char, i) => (
               <span
                 key={`${locale}-${i}`}
-                ref={(el) => { if (el) charsRef.current[i] = el; }}
+                ref={(el) => { charsRef.current[i] = el; }}
                 style={{ color: "rgba(255,255,255,0.12)", display: "inline", whiteSpace: char === " " ? "pre" : "normal" }}
               >
                 {char}

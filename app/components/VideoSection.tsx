@@ -3,10 +3,12 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../context/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function VideoSection() {
+  const { t } = useLanguage();
   const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,7 +32,7 @@ export default function VideoSection() {
           <div style={{ position: "relative", width: "100%", aspectRatio: "16/9" }}>
             <iframe
               src="https://www.youtube.com/embed/8cMvb3r38mQ"
-              title="Dalilah's aria Mon coeur s'ouvre a ta voix — Gia Jashvili & Georgian Sinfonietta"
+              title={t.events.videoCaption}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               style={{ position: "absolute", inset: 0, width: "100%", height: "100%", border: "none", display: "block" }}
@@ -56,7 +58,7 @@ export default function VideoSection() {
                 lineHeight: "21px",
               }}
             >
-              Dalilah&apos;s aria &ldquo;Mon coeur s&apos;ouvre a ta voix&rdquo; — Gia Jashvili &amp; Georgian Sinfonietta
+              {t.events.videoCaption}
             </div>
           </div>
 
