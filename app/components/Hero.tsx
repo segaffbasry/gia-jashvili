@@ -201,39 +201,20 @@ export default function Hero() {
           <div style={{ position: "absolute", top: "50%", left: "35%", right: "35%", height: "1px", transform: "translateY(-50%)", background: "linear-gradient(to right, transparent, rgba(185,166,153,0.9), #ffffff, rgba(185,166,153,0.9), transparent)", opacity: 0.75 }} />
         </div>
 
-          <div ref={subtitleRef} style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "0.9rem", alignSelf: "flex-end" }}>
-            {/* Left deco line */}
-            <svg width="36" height="8" viewBox="0 0 36 8" fill="none" style={{ opacity: 0.8, flexShrink: 0 }}>
-              <line x1="0" y1="4" x2="28" y2="4" stroke="var(--color-accent)" strokeWidth="0.8"/>
-              <polygon points="30,4 34,1.5 34,6.5" fill="var(--color-accent)" opacity="0.7"/>
-            </svg>
-
-            {titles.map((title, i) => (
-              <div key={title} style={{ display: "flex", alignItems: "center", gap: "0.7rem" }}>
-                {i > 0 && (
-                  <svg width="6" height="6" viewBox="0 0 6 6" fill="none" style={{ flexShrink: 0 }}>
-                    <rect x="3" y="0" width="4.24" height="4.24" transform="rotate(45 3 0)" fill="var(--color-accent)" opacity="0.7"/>
-                  </svg>
-                )}
-                <span style={{
-                  fontFamily: '"Hedvig Letters Serif", serif',
-                  color: "var(--color-accent)",
-                  fontSize: "12px",
-                  fontWeight: 400,
-                  letterSpacing: "0.28em",
-                  textTransform: "uppercase",
-                  whiteSpace: "nowrap",
-                }}>
-                  {title}
-                </span>
-              </div>
+          <div ref={subtitleRef} style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "2rem", alignSelf: "flex-end" }}>
+            {titles.map((title) => (
+              <span key={title} style={{
+                fontFamily: '"Hedvig Letters Serif", serif',
+                color: "rgba(255,255,255,0.7)",
+                fontSize: "12px",
+                fontWeight: 400,
+                letterSpacing: "0.28em",
+                textTransform: "uppercase",
+                whiteSpace: "nowrap",
+              }}>
+                {title}
+              </span>
             ))}
-
-            {/* Right deco line */}
-            <svg width="36" height="8" viewBox="0 0 36 8" fill="none" style={{ opacity: 0.8, flexShrink: 0 }}>
-              <polygon points="2,4 6,1.5 6,6.5" fill="var(--color-accent)" opacity="0.7"/>
-              <line x1="8" y1="4" x2="36" y2="4" stroke="var(--color-accent)" strokeWidth="0.8"/>
-            </svg>
           </div>
       </div>
     </section>
