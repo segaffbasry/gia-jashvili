@@ -82,7 +82,7 @@ export default function Quote() {
               <span
                 key={`${locale}-${i}`}
                 ref={(el) => { charsRef.current[i] = el; }}
-                style={{ color: "rgba(255,255,255,0.12)", display: "inline", whiteSpace: char === " " ? "pre" : "normal" }}
+                style={{ color: "rgba(255,255,255,0.12)", display: "inline" }}
               >
                 {char}
               </span>
